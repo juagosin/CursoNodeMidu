@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/juagosin/CursoNodeMidu/issues"
   },
-  "homepage": "https://github.com/juagosin/CursoNodeMidu#readme"
+  "homepage": "https://github.com/juagosin/CursoNodeMidu#readme",
+  "dependencies": {
+    "picocolors": " 1.0.0"
+  }
 }
