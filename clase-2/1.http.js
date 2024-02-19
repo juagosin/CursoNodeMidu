@@ -17,3 +17,4 @@ const server = http.createServer(processRequest)
 server.listen(desiredPort, () => {
   console.log(`servidor escuchando en el puerto http://localhost:${desiredPort}`)
 })
+// node --watch ./clase-2/1.http.js
