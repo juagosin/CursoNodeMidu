@@ -16,9 +16,29 @@ const processRequest = (req, res) => {
           return res.end('<h1>404</h1>')
       }
     case 'POST':
+
       switch (url) {
-        case '/pokemon':
-          const body = ''
+        case '/pokemon':{
+          let body = ''
+          // escuchar el evento data
+          req.on('data', chunk => {
+            body += chunk.toString()
+          })
+
+          req.on('end', () => {
+            const data = JSON.parse(body)
+            // llamar a bbdd para guardar la info
+            res.writeHead(201, { 'Content-Type': 'application/json; charset=utf-8' })
+
+            data.timestamp = Date.now()
+            res.end(JSON.stringify(data))
+          })
+          break
+        }
+        default:
+          res.statusCode = 404
+          res.setHeader('Content-Type', 'text/plain; charset=utf-9')
+          return res.end('404 Not Found')
 
           // ??
       }
