@@ -5,6 +5,14 @@ const PORT = process.env.PORT ?? 1234
 const app = express()
 app.disable('x-powered-by')
 
+app.use((req, res, next) => {
+  console.log('mi primer middleware')
+  // trackear la request a la bbdd
+  // revisar si el usuario tiene cookies
+  // etc
+  next()
+})
+
 app.get('/pokemon/ditto', (req, res) => {
   res.json(ditto)
 })
