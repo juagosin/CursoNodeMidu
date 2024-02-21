@@ -7,17 +7,9 @@ app.disable('x-powered-by')
 
 app.use((req, res, next) => {
   console.log('mi primer middleware')
-  // trackear la request a la bbdd
-  // revisar si el usuario tiene cookies
-  // etc
-  next()
-})
-
-app.get('/pokemon/ditto', (req, res) => {
-  res.json(ditto)
-})
-
-app.post('/pokemon', (req, res) => {
+  if (req.method !== 'POST') return next()
+  if (req.headers['content-type'] !== 'application/json') return next()
+  // solo llegan las request que son POST y que tienen el header Content-type: application/sjon
   let body = ''
   // escuchar el evento data
   req.on('data', chunk => {
@@ -27,8 +19,19 @@ app.post('/pokemon', (req, res) => {
   req.on('end', () => {
     const data = JSON.parse(body)
     data.timestamp = Date.now()
-    res.status(201).json(data)
+    // mutar la request y meter la informaci´n en el req.body
+    req.body = data
+    next()
   })
+})
+
+app.get('/pokemon/ditto', (req, res) => {
+  res.json(ditto)
+})
+
+app.post('/pokemon', (req, res) => {
+  // Deberiamos guardar en bbdd
+  res.status(201).json(req.body)
 })
 
 app.use((req, res) => {
