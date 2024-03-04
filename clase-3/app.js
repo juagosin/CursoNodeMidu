@@ -1,6 +1,7 @@
 const express = require('express') // require -->CommonJS
 const crypto = require('node:crypto')
 const movies = require('./movies.json')
+const { validateMovie } = require('./schemas/movies')
 
 const app = express()
 app.use(express.json())
@@ -25,24 +26,14 @@ app.get('/movies/:id', (req, res) => { // path-to-regexp
 })
 
 app.post('/movies', (req, res) => {
-  const {
-    title,
-    genre,
-    year,
-    director,
-    duration,
-    rate,
-    poster
-  } = req.body
+  const result = validateMovie(req.body)
+
+  if (result.error) {
+    return res.status(400).json({ error: JSON.parse(result.error.message) })
+  }
   const newMovie = {
     id: crypto.randomUUID(),
-    title,
-    genre,
-    director,
-    year,
-    duration,
-    rate: rate ?? 0,
-    poster
+    ...result.data
   }
   // Esto no sería REST, porque estamos guardando el estado de la apliación en memoria
   movies.push(newMovie)
